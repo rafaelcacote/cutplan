@@ -49,7 +49,8 @@
                     type="button"
                     class="ml-2 rounded-lg bg-gradient-to-r from-blue-500 to-indigo-500 px-6 py-2 font-semibold text-white shadow-md transition-transform hover:scale-105"
                     @click="salvar"
-                >Salvar</Button>
+                    >Salvar</Button
+                >
             </div>
         </template>
     </Dialog>

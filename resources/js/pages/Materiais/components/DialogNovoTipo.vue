@@ -8,9 +8,9 @@
         contentClass="p-0"
     >
         <form @submit.prevent="salvar">
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 p-4">
-                <div class="col-span-1 sm:col-span-2 flex flex-col">
-                    <label for="novo_tipo_nome" class="font-semibold text-gray-700 mb-1">Nome do tipo</label>
+            <div class="grid grid-cols-1 gap-3 p-4 sm:grid-cols-2">
+                <div class="col-span-1 flex flex-col sm:col-span-2">
+                    <label for="novo_tipo_nome" class="mb-1 font-semibold text-gray-700">Nome do tipo</label>
                     <InputText
                         id="novo_tipo_nome"
                         v-model="nome"
@@ -38,7 +38,8 @@
                 <Button
                     type="submit"
                     class="ml-2 rounded-lg bg-gradient-to-r from-blue-500 to-indigo-500 px-4 py-2 text-sm font-semibold text-white shadow-md transition-transform hover:scale-105"
-                >Salvar</Button>
+                    >Salvar</Button
+                >
             </div>
         </form>
     </Dialog>

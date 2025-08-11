@@ -1,6 +1,6 @@
 <template>
     <form @submit.prevent="submit">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 gap-6 md:grid-cols-3">
             <!-- Primeira linha: SKU, Nome, Tipo -->
             <div class="space-y-2">
                 <label for="sku" class="font-semibold">SKU</label>
@@ -16,12 +16,12 @@
                     <Button
                         type="button"
                         size="icon"
-                        class="!h-7 !w-7 !p-0 border border-blue-400 bg-white hover:bg-blue-50 transition-colors duration-150 flex items-center justify-center shadow-sm"
+                        class="flex !h-7 !w-7 items-center justify-center border border-blue-400 bg-white !p-0 shadow-sm transition-colors duration-150 hover:bg-blue-50"
                         style="border-radius: 50%"
                         @click="showTipoDialog = true"
                         aria-label="Adicionar novo tipo"
                     >
-                        <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <svg class="h-4 w-4 text-blue-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
                         </svg>
                     </Button>
@@ -45,12 +45,12 @@
                     <Button
                         type="button"
                         size="icon"
-                        class="!h-7 !w-7 !p-0 border border-blue-400 bg-white hover:bg-blue-50 transition-colors duration-150 flex items-center justify-center shadow-sm"
+                        class="flex !h-7 !w-7 items-center justify-center border border-blue-400 bg-white !p-0 shadow-sm transition-colors duration-150 hover:bg-blue-50"
                         style="border-radius: 50%"
                         @click="showUnidadeDialog = true"
                         aria-label="Adicionar nova unidade"
                     >
-                        <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <svg class="h-4 w-4 text-blue-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
                         </svg>
                     </Button>
@@ -142,8 +142,8 @@ import { Button } from '@/components/ui/button';
 import Dropdown from 'primevue/dropdown';
 import InputText from 'primevue/inputtext';
 import { reactive, ref, watch } from 'vue';
-import DialogNovoTipo from './components/DialogNovoTipo.vue';
 import DialogNovaUnidade from './components/DialogNovaUnidade.vue';
+import DialogNovoTipo from './components/DialogNovoTipo.vue';
 
 const props = defineProps({
     modelValue: Object,
