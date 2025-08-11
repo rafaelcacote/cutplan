@@ -32,12 +32,10 @@ class FornecedorController extends Controller
 
     public function store(StoreFornecedorRequest $request)
     {
-        $fornecedor = Fornecedor::create($request->validated());
-        return redirect()->route('fornecedores.index')->with('success', 'Fornecedor criado com sucesso!');
         $validated = $request->validated();
         // Cria o endereço
         $endereco = \App\Models\Endereco::create($validated['endereco']);
-        // Cria o fornecedor com o endereço vinculado
+        // Cria o fornecedor com o endereço vinculado e o usuário autenticado
         $fornecedor = Fornecedor::create([
             'nome' => $validated['nome'],
             'documento' => $validated['documento'] ?? null,
@@ -60,6 +58,7 @@ class FornecedorController extends Controller
 
     public function edit(Fornecedor $fornecedor)
     {
+        $fornecedor->load('endereco');
         $enderecos = Endereco::all();
         return Inertia::render('Fornecedores/Edit', [
             'fornecedor' => $fornecedor,
@@ -69,8 +68,6 @@ class FornecedorController extends Controller
 
     public function update(UpdateFornecedorRequest $request, Fornecedor $fornecedor)
     {
-        $fornecedor->update($request->validated());
-        return redirect()->route('fornecedores.index')->with('success', 'Fornecedor atualizado com sucesso!');
         $validated = $request->validated();
         // Atualiza ou cria o endereço vinculado
         if ($fornecedor->endereco_id && $fornecedor->endereco) {

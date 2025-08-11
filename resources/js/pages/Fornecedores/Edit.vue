@@ -2,8 +2,8 @@
     <Head title="Editar Fornecedor" />
 
     <AppLayout :breadcrumbs="breadcrumbs">
-        <div class="flex flex-col min-h-[calc(100vh-64px)] w-full bg-background p-0">
-            <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 px-8 pt-8 pb-4">
+        <div class="flex min-h-[calc(100vh-64px)] w-full flex-col bg-background p-0">
+            <div class="flex flex-col items-start justify-between gap-4 px-8 pt-8 pb-4 md:flex-row md:items-center">
                 <div class="flex items-center gap-4">
                     <Button variant="ghost" size="sm" as-child>
                         <Link :href="route('fornecedores.index')">
@@ -23,7 +23,7 @@
                         <CardDescription>Edite os dados do fornecedor abaixo</CardDescription>
                     </CardHeader>
                     <CardContent>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div class="grid grid-cols-1 gap-8 md:grid-cols-2">
                             <div class="space-y-6">
                                 <div class="space-y-2">
                                     <Label for="nome">Nome</Label>
@@ -47,7 +47,12 @@
                                 </div>
                                 <div class="space-y-2">
                                     <Label for="observacoes">Observações</Label>
-                                    <InputText id="observacoes" v-model="form.observacoes" placeholder="Observações sobre o fornecedor" class="w-full" />
+                                    <InputText
+                                        id="observacoes"
+                                        v-model="form.observacoes"
+                                        placeholder="Observações sobre o fornecedor"
+                                        class="w-full"
+                                    />
                                     <p v-if="form.errors.observacoes" class="text-sm text-destructive">{{ form.errors.observacoes }}</p>
                                 </div>
                             </div>
@@ -60,7 +65,7 @@
                                     <Label for="linha2">Complemento</Label>
                                     <InputText id="linha2" v-model="form.endereco.linha2" placeholder="Apto, bloco, etc." class="w-full" />
                                 </div>
-                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
                                     <div class="space-y-2">
                                         <Label for="cidade">Cidade</Label>
                                         <InputText id="cidade" v-model="form.endereco.cidade" placeholder="Cidade" class="w-full" />
@@ -80,12 +85,23 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="flex items-center gap-4 justify-end mt-8">
-                            <Button type="submit" :disabled="form.processing" size="lg" class="bg-gradient-to-r from-[#3B82F6] to-[#6366F1] text-white shadow-lg border-0 px-8 py-3 text-lg font-semibold transition-transform duration-300 hover:scale-105">
+                        <div class="mt-8 flex items-center justify-end gap-4">
+                            <Button
+                                type="submit"
+                                :disabled="form.processing"
+                                size="lg"
+                                class="border-0 bg-gradient-to-r from-[#3B82F6] to-[#6366F1] px-8 py-3 text-lg font-semibold text-white shadow-lg transition-transform duration-300 hover:scale-105"
+                            >
                                 <Save class="mr-2 h-5 w-5" />
                                 {{ form.processing ? 'Salvando...' : 'Salvar' }}
                             </Button>
-                            <Button variant="outline" type="button" as-child size="lg" class="px-8 py-3 text-lg border-[#3B82F6] text-[#3B82F6] dark:text-[#60A5FA] hover:bg-[#EFF6FF] dark:hover:bg-[#334155] rounded-lg transition-all duration-300">
+                            <Button
+                                variant="outline"
+                                type="button"
+                                as-child
+                                size="lg"
+                                class="rounded-lg border-[#3B82F6] px-8 py-3 text-lg text-[#3B82F6] transition-all duration-300 hover:bg-[#EFF6FF] dark:text-[#60A5FA] dark:hover:bg-[#334155]"
+                            >
                                 <Link :href="route('fornecedores.index')"> Cancelar </Link>
                             </Button>
                         </div>
@@ -99,12 +115,13 @@
 <script setup lang="ts">
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import InputText from 'primevue/inputtext';
 import { Label } from '@/components/ui/label';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { type BreadcrumbItem } from '@/types';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 import { ArrowLeft, Save } from 'lucide-vue-next';
+import InputText from 'primevue/inputtext';
+import { useToast } from 'primevue/usetoast';
 
 interface Endereco {
     id: number;
@@ -146,7 +163,6 @@ type Props = {
     };
 };
 
-
 const props = defineProps<Props>();
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -180,7 +196,18 @@ const form = useForm({
     },
 });
 
+const toast = useToast();
 const submit = () => {
-    form.put(route('fornecedores.update', props.fornecedor.id));
+    form.put(route('fornecedores.update', props.fornecedor.id), {
+        onSuccess: () => {
+            toast.add({
+                severity: 'success',
+                summary: 'Sucesso',
+                detail: 'Fornecedor atualizado com sucesso!',
+                life: 4000,
+                group: 'main',
+            });
+        },
+    });
 };
 </script>

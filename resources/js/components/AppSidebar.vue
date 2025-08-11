@@ -5,30 +5,33 @@ import NavUser from '@/components/NavUser.vue';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/vue3';
-import { BookOpen, CreditCard, Folder, LayoutGrid, Receipt, Tags } from 'lucide-vue-next';
+import { LayoutDashboard, Truck, Users, Box } from 'lucide-vue-next';
 import AppLogo from './AppLogo.vue';
 
 const mainNavItems: NavItem[] = [
     {
         title: 'Dashboard',
         href: '/dashboard',
-        icon: LayoutGrid,
+        icon: LayoutDashboard,
     },
     {
         title: 'Clientes',
         href: '/clientes',
-        icon: BookOpen,
+        icon: Users,
     },
     {
         title: 'Fornecedores',
         href: '/fornecedores',
-        icon: Folder,
+        icon: Truck,
+    },
+    {
+        title: 'Materiais',
+        href: '/materiais',
+        icon: Box,
     },
 ];
 
-const footerNavItems: NavItem[] = [
- 
-];
+const footerNavItems: NavItem[] = [];
 </script>
 
 <template>
