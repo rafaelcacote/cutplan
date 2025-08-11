@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Material;
 use App\Models\Fornecedor;
+use App\Models\Unidade;
+use App\Models\TipoMaterial;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreMaterialRequest;
 use App\Http\Requests\UpdateMaterialRequest;
@@ -19,8 +21,13 @@ class MaterialController extends Controller
     public function create()
     {
         $fornecedores = Fornecedor::all();
-        // tipos e unidades: adicionar quando os models existirem
-        return inertia('Materiais/Create', compact('fornecedores'));
+        $unidades = Unidade::all();
+        $tiposmaterial = TipoMaterial::all();
+        return inertia('Materiais/Create', [
+            'fornecedores' => $fornecedores,
+            'unidades' => $unidades,
+            'tiposmaterial' => $tiposmaterial,
+        ]);
     }
 
     public function store(StoreMaterialRequest $request)
@@ -39,8 +46,14 @@ class MaterialController extends Controller
     {
         $material->load(['tipo', 'unidade', 'fornecedorPadrao']);
         $fornecedores = Fornecedor::all();
-        // tipos e unidades: adicionar quando os models existirem
-        return inertia('Materiais/Edit', compact('material', 'fornecedores'));
+        $unidades = Unidade::all();
+        $tiposmaterial = TipoMaterial::all();
+        return inertia('Materiais/Edit', [
+            'material' => $material,
+            'fornecedores' => $fornecedores,
+            'unidades' => $unidades,
+            'tiposmaterial' => $tiposmaterial,
+        ]);
     }
 
     public function update(UpdateMaterialRequest $request, Material $material)

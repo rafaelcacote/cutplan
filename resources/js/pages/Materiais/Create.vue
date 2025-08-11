@@ -7,7 +7,7 @@ import { ArrowLeft } from 'lucide-vue-next';
 import MaterialForm from './Form.vue';
 
 const props = defineProps({
-    tipos: Array,
+    tiposmaterial: Array,
     unidades: Array,
     fornecedores: Array,
 });
@@ -59,7 +59,12 @@ function handleSubmit() {
                         <CardDescription>Preencha os dados do material abaixo</CardDescription>
                     </CardHeader>
                     <CardContent>
-                        <MaterialForm v-model="form" :tipos="props.tipos" :unidades="props.unidades" :fornecedores="props.fornecedores" />
+                        <MaterialForm
+                            v-model="form"
+                            :tiposmaterial="props.tiposmaterial"
+                            :unidades="props.unidades"
+                            :fornecedores="props.fornecedores"
+                        />
                     </CardContent>
                 </Card>
             </form>

@@ -22,6 +22,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         'fornecedores' => 'fornecedor'
     ]);
     Route::resource('enderecos', EnderecoController::class);
+    Route::post('tipos-materiais', [\App\Http\Controllers\TipoMaterialController::class, 'store'])->name('tipos-materiais.store');
     require __DIR__.'/materiais.php';
 });
 
