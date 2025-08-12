@@ -3,7 +3,12 @@
 use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\EnderecoController;
 use App\Http\Controllers\FornecedorController;
+use App\Http\Controllers\RolePageController;
+use App\Http\Controllers\UsuarioPageController;
 use Illuminate\Support\Facades\Route;
+
+require __DIR__.'/usuarios.php';
+require __DIR__.'/roles.php';
 use Inertia\Inertia;
 
 
@@ -14,6 +19,9 @@ Route::get('/', function () {
 Route::get('dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::middleware(['auth', 'verified'])->get('/roles', [RolePageController::class, 'index'])->name('roles.index');
+Route::middleware(['auth', 'verified'])->get('/usuarios', [UsuarioPageController::class, 'index'])->name('usuarios.index');
 
 
 Route::middleware(['auth', 'verified'])->group(function () {
