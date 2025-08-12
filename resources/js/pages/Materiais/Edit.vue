@@ -6,29 +6,47 @@ import { Head, Link, useForm } from '@inertiajs/vue3';
 import { ArrowLeft } from 'lucide-vue-next';
 import MaterialForm from './Form.vue';
 
-const props = defineProps({
-    material: Object,
-    tiposmaterial: Array,
-    unidades: Array,
-    fornecedores: Array,
-});
+
+interface Material {
+    id: number;
+    sku: string;
+    nome: string;
+    tipo_id: number;
+    unidade_id: number;
+    fornecedor_padrao_id?: number;
+    preco_custo?: string;
+    estoque_minimo?: string;
+    controla_estoque: boolean | number;
+    ativo: boolean | number;
+}
+
+interface Props {
+    material: Material;
+    tiposmaterial: any[];
+    unidades: any[];
+    fornecedores: any[];
+}
+
+const props = defineProps<Props>();
+
+console.log("props", props.material)
 
 const breadcrumbs = [
     { title: 'Dashboard', href: '/dashboard' },
     { title: 'Materiais', href: '/materiais' },
-    { title: `Editar Material`, href: `/materiais/${props.material.id}/edit` },
+    { title: `Editar Material`, href: `/materiais/${props.material?.id}/edit` },
 ];
 
 const form = useForm({
-    sku: props.material.sku,
-    nome: props.material.nome,
-    tipo_id: props.material.tipo_id,
-    unidade_id: props.material.unidade_id,
-    fornecedor_padrao_id: props.material.fornecedor_padrao_id,
-    preco_custo: props.material.preco_custo,
-    estoque_minimo: props.material.estoque_minimo,
-    controla_estoque: props.material.controla_estoque,
-    ativo: props.material.ativo,
+    sku: props.material?.sku ?? '',
+    nome: props.material?.nome ?? '',
+    tipo_id: props.material?.tipo_id ?? '',
+    unidade_id: props.material?.unidade_id ?? '',
+    fornecedor_padrao_id: props.material?.fornecedor_padrao_id ?? '',
+    preco_custo: props.material?.preco_custo ?? '',
+    estoque_minimo: props.material?.estoque_minimo ?? '',
+    controla_estoque: props.material?.controla_estoque ?? 1,
+    ativo: props.material?.ativo ?? 1,
 });
 
 function handleSubmit() {
@@ -61,10 +79,10 @@ function handleSubmit() {
                     </CardHeader>
                     <CardContent>
                         <MaterialForm
-                            v-model="form"
-                            :tiposmaterial="props.tiposmaterial"
-                            :unidades="props.unidades"
-                            :fornecedores="props.fornecedores"
+                            :form="form"
+                            :tiposmaterial="props.tiposmaterial ?? []"
+                            :unidades="props.unidades ?? []"
+                            :fornecedores="props.fornecedores ?? []"
                         />
                     </CardContent>
                 </Card>

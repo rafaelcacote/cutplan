@@ -1,4 +1,10 @@
+
 <script setup lang="ts">
+
+function formatEstoqueMinimo(value?: string | number) {
+    if (!value) return '-';
+    return parseInt(Number(value).toString(), 10);
+}
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
@@ -12,6 +18,7 @@ import InputText from 'primevue/inputtext';
 import Toast from 'primevue/toast';
 import { useToast } from 'primevue/usetoast';
 import { onMounted, ref, watch } from 'vue';
+import TagAtivo from './_TagAtivo.vue';
 
 interface Material {
     id: number;
@@ -91,12 +98,6 @@ const showToastMessages = () => {
             detail: successMsg,
             life: 4000,
             group: 'main',
-            style: {
-                background: '#22C55E',
-                color: '#fff',
-                borderRadius: '0.75rem',
-                boxShadow: '0 4px 24px 0 rgba(34,197,94,0.15)',
-            },
             icon: 'pi pi-check',
             contentClass: 'flex items-center gap-2',
             class: 'fade-in',
@@ -110,12 +111,6 @@ const showToastMessages = () => {
             detail: errorMsg,
             life: 4000,
             group: 'main',
-            style: {
-                background: '#EF4444',
-                color: '#fff',
-                borderRadius: '0.75rem',
-                boxShadow: '0 4px 24px 0 rgba(239,68,68,0.15)',
-            },
             icon: 'pi pi-exclamation-triangle',
             contentClass: 'flex items-center gap-2',
             class: 'fade-in',
@@ -338,9 +333,9 @@ const formatBoolean = (val: boolean) => (val ? 'Sim' : 'Não');
                                 </template>
                             </Column>
                             <Column field="estoque_minimo" header="Estoque Mínimo">
-                                <template #body="{ data }">
-                                    <span>{{ data.estoque_minimo || '-' }}</span>
-                                </template>
+                                    <template #body="{ data }">
+                                        <span>{{ formatEstoqueMinimo(data.estoque_minimo) }}</span>
+                                    </template>
                             </Column>
                             <Column field="controla_estoque" header="Controla Estoque">
                                 <template #body="{ data }">
@@ -349,7 +344,7 @@ const formatBoolean = (val: boolean) => (val ? 'Sim' : 'Não');
                             </Column>
                             <Column field="ativo" header="Ativo">
                                 <template #body="{ data }">
-                                    <span :class="data.ativo ? 'text-green-600' : 'text-red-500'">{{ formatBoolean(data.ativo) }}</span>
+                                    <TagAtivo :ativo="data.ativo">{{ formatBoolean(data.ativo) }}</TagAtivo>
                                 </template>
                             </Column>
                             <Column header="Ações" style="width: 180px">
@@ -361,7 +356,7 @@ const formatBoolean = (val: boolean) => (val ? 'Sim' : 'Não');
                                             as-child
                                             class="bg-gradient-to-r from-[#3B82F6]/10 to-[#6366F1]/10 text-[#3B82F6] transition-transform duration-300 hover:scale-105 dark:text-[#60A5FA]"
                                         >
-                                            <Link :href="route('materiais.show', data.id)">
+                                            <Link :href="route('materiais.show', { materiai: data.id })">
                                                 <Eye class="h-4 w-4" />
                                             </Link>
                                         </Button>
@@ -371,7 +366,7 @@ const formatBoolean = (val: boolean) => (val ? 'Sim' : 'Não');
                                             as-child
                                             class="bg-gradient-to-r from-[#6366F1]/10 to-[#3B82F6]/10 text-[#6366F1] transition-transform duration-300 hover:scale-105 dark:text-[#A5B4FC]"
                                         >
-                                            <Link :href="route('materiais.edit', data.id)">
+                                            <Link :href="route('materiais.edit', { materiai: data.id })">
                                                 <Edit class="h-4 w-4" />
                                             </Link>
                                         </Button>

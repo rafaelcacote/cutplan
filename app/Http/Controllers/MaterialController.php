@@ -45,6 +45,7 @@ class MaterialController extends Controller
     public function edit(Material $material)
     {
         $material->load(['tipo', 'unidade', 'fornecedorPadrao']);
+       
         $fornecedores = Fornecedor::all();
         $unidades = Unidade::all();
         $tiposmaterial = TipoMaterial::all();

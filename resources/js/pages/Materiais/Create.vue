@@ -60,7 +60,7 @@ function handleSubmit() {
                     </CardHeader>
                     <CardContent>
                         <MaterialForm
-                            v-model="form"
+                            :form="form"
                             :tiposmaterial="props.tiposmaterial"
                             :unidades="props.unidades"
                             :fornecedores="props.fornecedores"
