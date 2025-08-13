@@ -10,11 +10,13 @@
                     <p class="text-[#64748B] dark:text-[#CBD5E1]">Gerencie perfis de usuário e suas permissões</p>
                 </div>
                 <Button
-                    @click="showCreate = true"
+                    as-child
                     class="rounded-lg border-0 bg-gradient-to-r from-[#3B82F6] to-[#6366F1] px-6 py-2 text-base font-semibold text-white shadow-lg transition-transform duration-300 hover:scale-105"
                 >
-                    <Plus class="mr-2 h-4 w-4" />
-                    Novo Perfil
+                    <Link :href="route('roles.create')">
+                        <Plus class="mr-2 h-4 w-4" />
+                        Novo Perfil
+                    </Link>
                 </Button>
             </div>
 
@@ -51,7 +53,7 @@
                                 <template #body="{ data }">
                                     <div class="flex gap-2">
                                         <Button
-                                            @click="editRole(data)"
+                                            @click="goToEdit(data)"
                                             size="sm"
                                             variant="ghost"
                                             class="text-[#3B82F6] hover:bg-[#3B82F6]/10 dark:text-[#60A5FA]"
@@ -68,28 +70,6 @@
                     </div>
                 </CardContent>
             </Card>
-
-            <!-- Dialog para criar perfil -->
-            <Dialog v-model:open="showCreate" class="max-w-2xl">
-                <DialogContent>
-                    <DialogHeader>
-                        <DialogTitle>Novo Perfil</DialogTitle>
-                        <DialogDescription> Preencha os dados para criar um novo perfil </DialogDescription>
-                    </DialogHeader>
-                    <RoleForm @saved="onRoleSaved" />
-                </DialogContent>
-            </Dialog>
-
-            <!-- Dialog para editar perfil -->
-            <Dialog v-model:open="showEdit" class="max-w-2xl">
-                <DialogContent>
-                    <DialogHeader>
-                        <DialogTitle>Editar Perfil</DialogTitle>
-                        <DialogDescription> Atualize os dados do perfil </DialogDescription>
-                    </DialogHeader>
-                    <RoleForm :role="selectedRole" @saved="onRoleSaved" />
-                </DialogContent>
-            </Dialog>
         </div>
     </AppLayout>
 </template>
@@ -97,9 +77,8 @@
 <script setup lang="ts">
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import AppLayout from '@/layouts/AppLayout.vue';
-import { Head } from '@inertiajs/vue3';
+import { Head, Link, router } from '@inertiajs/vue3';
 import { Pencil, Plus, Trash2 } from 'lucide-vue-next';
 import Column from 'primevue/column';
 import DataTable from 'primevue/datatable';
@@ -107,7 +86,7 @@ import Tag from 'primevue/tag';
 import Toast from 'primevue/toast';
 import { onMounted, ref } from 'vue';
 import api from '../../api';
-import RoleForm from './RoleForm.vue';
+// import removido: RoleForm não é mais usado
 
 const breadcrumbs = [
     { title: 'Dashboard', href: '/dashboard' },
@@ -115,18 +94,13 @@ const breadcrumbs = [
 ];
 
 const roles = ref([]);
-const showCreate = ref(false);
-const showEdit = ref(false);
-const selectedRole = ref(null);
-
-const fetchRoles = async () => {
-    const response = await api.get('/roles');
-    roles.value = response.data;
+const goToEdit = (role: any) => {
+    router.visit(`/roles/${role.id}/edit`);
 };
 
-const editRole = (role: any) => {
-    selectedRole.value = role;
-    showEdit.value = true;
+const fetchRoles = async () => {
+    const response = await api.get('/api/roles');
+    roles.value = response.data;
 };
 
 const deleteRole = (role: any) => {
@@ -135,11 +109,7 @@ const deleteRole = (role: any) => {
     }
 };
 
-const onRoleSaved = () => {
-    showCreate.value = false;
-    showEdit.value = false;
-    fetchRoles();
-};
+// função removida: onRoleSaved não é mais usada
 
 onMounted(fetchRoles);
 </script>

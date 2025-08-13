@@ -41,7 +41,6 @@
 
 <script setup lang="ts">
 import { Button } from '@/components/ui/button';
-import { router } from '@inertiajs/vue3';
 import { Check } from 'lucide-vue-next';
 import InputText from 'primevue/inputtext';
 import MultiSelect from 'primevue/multiselect';
@@ -74,7 +73,7 @@ const form = ref<UserFormType>({
 const rolesOptions = ref<{ name: string; id: number }[]>([]);
 
 const fetchRoles = async () => {
-    const response = await api.get('/roles');
+    const response = await api.get('/api/usuarios/roles');
     rolesOptions.value = response.data;
 };
 
@@ -96,15 +95,13 @@ watch(
     { immediate: true },
 );
 
-const saveUser = () => {
+const saveUser = async () => {
     if (form.value.id) {
-        router.put(`/usuarios/${form.value.id}`, form.value, {
-            onSuccess: () => emit('saved'),
-        });
+        await api.put(`/api/usuarios/${form.value.id}`, form.value);
+        emit('saved');
     } else {
-        router.post('/usuarios', form.value, {
-            onSuccess: () => emit('saved'),
-        });
+        await api.post('/api/usuarios', form.value);
+        emit('saved');
     }
 };
 

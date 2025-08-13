@@ -15,7 +15,7 @@ class MaterialController extends Controller
     public function index()
     {
         $materiais = Material::with(['tipo', 'unidade', 'fornecedorPadrao'])->paginate(15);
-        return inertia('Materiais/Index', compact('materiais'));
+    return inertia('materiais/Index', compact('materiais'));
     }
 
     public function create()
@@ -23,7 +23,7 @@ class MaterialController extends Controller
         $fornecedores = Fornecedor::all();
         $unidades = Unidade::all();
         $tiposmaterial = TipoMaterial::all();
-        return inertia('Materiais/Create', [
+    return inertia('materiais/Create', [
             'fornecedores' => $fornecedores,
             'unidades' => $unidades,
             'tiposmaterial' => $tiposmaterial,
@@ -39,17 +39,17 @@ class MaterialController extends Controller
     public function show(Material $material)
     {
         $material->load(['tipo', 'unidade', 'fornecedorPadrao']);
-        return inertia('Materiais/Show', compact('material'));
+    return inertia('materiais/Show', compact('material'));
     }
 
     public function edit(Material $material)
     {
         $material->load(['tipo', 'unidade', 'fornecedorPadrao']);
-       
+
         $fornecedores = Fornecedor::all();
         $unidades = Unidade::all();
         $tiposmaterial = TipoMaterial::all();
-        return inertia('Materiais/Edit', [
+    return inertia('materiais/Edit', [
             'material' => $material,
             'fornecedores' => $fornecedores,
             'unidades' => $unidades,

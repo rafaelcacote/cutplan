@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Route;
 
 require __DIR__.'/usuarios.php';
 require __DIR__.'/roles.php';
+require __DIR__.'/equipes.php';
 use Inertia\Inertia;
 
 
@@ -21,7 +22,11 @@ Route::get('dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware(['auth', 'verified'])->get('/roles', [RolePageController::class, 'index'])->name('roles.index');
+Route::middleware(['auth', 'verified'])->get('/roles/create', [RolePageController::class, 'create'])->name('roles.create');
+Route::middleware(['auth', 'verified'])->get('/roles/{role}/edit', [RolePageController::class, 'edit'])->name('roles.edit');
 Route::middleware(['auth', 'verified'])->get('/usuarios', [UsuarioPageController::class, 'index'])->name('usuarios.index');
+Route::middleware(['auth', 'verified'])->get('/usuarios/create', [UsuarioPageController::class, 'create'])->name('usuarios.create');
+Route::middleware(['auth', 'verified'])->get('/usuarios/{user}/edit', [UsuarioPageController::class, 'edit'])->name('usuarios.edit');
 
 
 Route::middleware(['auth', 'verified'])->group(function () {

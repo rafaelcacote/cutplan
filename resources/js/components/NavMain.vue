@@ -38,6 +38,14 @@ const page = usePage();
                 </SidebarMenuButton>
             </SidebarMenuItem>
             <SidebarMenuItem>
+                <SidebarMenuButton as-child :is-active="page.url.startsWith('/equipes')" tooltip="Equipes">
+                    <Link href="/equipes">
+                        <Users class="mr-2 h-4 w-4" />
+                        <span>Equipes</span>
+                    </Link>
+                </SidebarMenuButton>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
                 <SidebarMenuButton as-child :is-active="page.url.startsWith('/fornecedores')" tooltip="Fornecedores">
                     <Link href="/fornecedores">
                         <Truck class="mr-2 h-4 w-4" />

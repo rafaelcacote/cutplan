@@ -11,4 +11,20 @@ class RolePageController extends Controller
     {
         return Inertia::render('roles/Index');
     }
+
+    public function create()
+    {
+        return Inertia::render('roles/Create');
+    }
+
+    public function edit(\Spatie\Permission\Models\Role $role)
+    {
+        return Inertia::render('roles/Edit', [
+            'role' => [
+                'id' => $role->id,
+                'name' => $role->name,
+                'permissions' => $role->permissions->pluck('name'),
+            ],
+        ]);
+    }
 }
