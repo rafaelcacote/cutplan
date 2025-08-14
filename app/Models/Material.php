@@ -22,6 +22,14 @@ class Material extends Model
         'estoque_minimo',
         'controla_estoque',
         'ativo',
+        'user_id', // usuário que criou ou editou
+    ];
+
+    protected $casts = [
+        'preco_custo' => 'decimal:4',
+        'estoque_minimo' => 'decimal:4',
+        'controla_estoque' => 'boolean',
+        'ativo' => 'boolean',
     ];
 
     public function tipo()
@@ -37,5 +45,11 @@ class Material extends Model
     public function fornecedorPadrao()
     {
         return $this->belongsTo(Fornecedor::class, 'fornecedor_padrao_id');
+    }
+
+    // Usuário que cadastrou ou editou
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }

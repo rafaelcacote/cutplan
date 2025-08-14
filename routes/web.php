@@ -1,8 +1,11 @@
 <?php
 
 use App\Http\Controllers\ClienteController;
+use App\Http\Controllers\ServicoController;
+use App\Http\Controllers\ServicoItemController;
 use App\Http\Controllers\EnderecoController;
 use App\Http\Controllers\FornecedorController;
+use App\Http\Controllers\MaterialController;
 use App\Http\Controllers\RolePageController;
 use App\Http\Controllers\UsuarioPageController;
 use Illuminate\Support\Facades\Route;
@@ -31,12 +34,25 @@ Route::middleware(['auth', 'verified'])->get('/usuarios/{user}/edit', [UsuarioPa
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('clientes', ClienteController::class);
+    Route::resource('servicos', ServicoController::class);
+    Route::resource('servico-itens', ServicoItemController::class)->parameters([
+        'servico-itens' => 'servicoItem'
+    ]);
+    Route::get('autocomplete/servicos', [ServicoItemController::class, 'searchServicos'])->name('autocomplete.servicos');
     Route::resource('fornecedores', FornecedorController::class)->parameters([
         'fornecedores' => 'fornecedor'
     ]);
+    Route::resource('materiais', MaterialController::class)->parameters([
+        'materiais' => 'material'
+    ]);
     Route::resource('enderecos', EnderecoController::class);
     Route::post('tipos-materiais', [\App\Http\Controllers\TipoMaterialController::class, 'store'])->name('tipos-materiais.store');
-    require __DIR__.'/materiais.php';
+
+    // CRUD de contatos
+    Route::resource('contatos', \App\Http\Controllers\ContatoController::class);
+    // Autocomplete para clientes e fornecedores
+    Route::get('autocomplete/clientes', [\App\Http\Controllers\ContatoController::class, 'clientesAutocomplete'])->name('autocomplete.clientes');
+    Route::get('autocomplete/fornecedores', [\App\Http\Controllers\ContatoController::class, 'fornecedoresAutocomplete'])->name('autocomplete.fornecedores');
 });
 
 require __DIR__.'/settings.php';

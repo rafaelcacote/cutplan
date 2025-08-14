@@ -4,8 +4,6 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 
-defineProps<{ endereco: any }>();
-
 const props = defineProps<{ endereco: any }>();
 
 const form = useForm({
