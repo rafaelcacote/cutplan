@@ -13,7 +13,6 @@ class ServicoItem extends Model
     protected $table = 'servico_itens';
 
     protected $fillable = [
-        'servico_id',
         'descricao_item',
         'ordem',
         'opcional',
@@ -24,11 +23,5 @@ class ServicoItem extends Model
         'ordem' => 'integer',
     ];
 
-    /**
-     * Relacionamento com Servico
-     */
-    public function servico(): BelongsTo
-    {
-        return $this->belongsTo(Servico::class);
-    }
+    // Removido relacionamento com Servico
 }

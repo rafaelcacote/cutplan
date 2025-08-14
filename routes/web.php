@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ClienteController;
+use App\Http\Controllers\OrcamentoController;
 use App\Http\Controllers\ServicoController;
 use App\Http\Controllers\ServicoItemController;
 use App\Http\Controllers\EnderecoController;
@@ -34,11 +35,26 @@ Route::middleware(['auth', 'verified'])->get('/usuarios/{user}/edit', [UsuarioPa
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('clientes', ClienteController::class);
+    Route::resource('orcamentos', OrcamentoController::class);
+
+    // Nova rota para o formulário simples de orçamentos
+    Route::get('orcamentos-simples/create', [OrcamentoController::class, 'createSimple'])->name('orcamentos.create-simple');
+    Route::post('orcamentos-simples', [OrcamentoController::class, 'storeSimple'])->name('orcamentos.store-simple');
+
+    // Rotas para PDF dos orçamentos
+    Route::get('orcamentos/{orcamento}/pdf', [OrcamentoController::class, 'gerarPdf'])->name('orcamentos.pdf');
+    Route::get('orcamentos/{orcamento}/visualizar-pdf', [OrcamentoController::class, 'visualizarPdf'])->name('orcamentos.visualizar-pdf');
+
+    // Rotas de autocomplete para orçamentos
+    Route::get('autocomplete/servicos', [OrcamentoController::class, 'searchServicos'])->name('autocomplete.servicos');
+    Route::get('autocomplete/servico-itens', [OrcamentoController::class, 'searchServicoItens'])->name('autocomplete.servico-itens');
+    Route::get('autocomplete/unidades', [OrcamentoController::class, 'searchUnidades'])->name('autocomplete.unidades');
+
     Route::resource('servicos', ServicoController::class);
     Route::resource('servico-itens', ServicoItemController::class)->parameters([
         'servico-itens' => 'servicoItem'
     ]);
-    Route::get('autocomplete/servicos', [ServicoItemController::class, 'searchServicos'])->name('autocomplete.servicos');
+    Route::get('autocomplete/servicos-for-items', [ServicoItemController::class, 'searchServicos'])->name('autocomplete.servicos-for-items');
     Route::resource('fornecedores', FornecedorController::class)->parameters([
         'fornecedores' => 'fornecedor'
     ]);

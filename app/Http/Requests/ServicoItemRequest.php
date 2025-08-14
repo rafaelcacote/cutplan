@@ -21,9 +21,13 @@ class ServicoItemRequest extends FormRequest
      */
     public function rules(): array
     {
+        $id = $this->route('servico_item')?->id ?? $this->route('id');
         return [
-            'servico_id' => ['required', 'exists:servicos,id'],
-            'descricao_item' => ['required', 'string'],
+            'descricao_item' => [
+                'required',
+                'string',
+                'unique:servico_itens,descricao_item' . ($id ? ",{$id},id" : '')
+            ],
             'ordem' => ['nullable', 'integer', 'min:1'],
             'opcional' => ['boolean'],
         ];
@@ -35,10 +39,9 @@ class ServicoItemRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'servico_id.required' => 'O serviço é obrigatório.',
-            'servico_id.exists' => 'O serviço selecionado não existe.',
             'descricao_item.required' => 'A descrição do item é obrigatória.',
             'descricao_item.string' => 'A descrição deve ser um texto.',
+            'descricao_item.unique' => 'Já existe um item com essa descrição.',
             'ordem.integer' => 'A ordem deve ser um número inteiro.',
             'ordem.min' => 'A ordem deve ser no mínimo 1.',
             'opcional.boolean' => 'O campo opcional deve ser verdadeiro ou falso.',

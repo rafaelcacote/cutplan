@@ -17,19 +17,14 @@ class ServicoItemController extends Controller
      */
     public function index(): Response
     {
-        $query = ServicoItem::with(['servico']);
+    $query = ServicoItem::query();
 
         // Filtro por descrição
         if (request('descricao_item')) {
             $query->where('descricao_item', 'like', '%' . request('descricao_item') . '%');
         }
 
-        // Filtro por serviço
-        if (request('servico_nome')) {
-            $query->whereHas('servico', function ($q) {
-                $q->where('nome', 'like', '%' . request('servico_nome') . '%');
-            });
-        }
+    // Filtro por serviço removido
 
         // Filtro por opcional
         if (request('opcional') !== null && request('opcional') !== '') {
@@ -39,7 +34,7 @@ class ServicoItemController extends Controller
         // Ordenação
         $sortField = request('sort', 'ordem');
         $sortOrder = request('order', 'asc');
-        
+
         $allowedSorts = ['descricao_item', 'ordem', 'opcional', 'created_at'];
         if (in_array($sortField, $allowedSorts)) {
             $query->orderBy($sortField, $sortOrder);
@@ -77,7 +72,7 @@ class ServicoItemController extends Controller
     public function store(ServicoItemRequest $request): RedirectResponse
     {
         $validated = $request->validated();
-        
+
         ServicoItem::create($validated);
 
         return to_route('servico-itens.index')
@@ -89,7 +84,7 @@ class ServicoItemController extends Controller
      */
     public function show(ServicoItem $servicoItem): Response
     {
-        $servicoItem->load(['servico']);
+
 
         return Inertia::render('servico-itens/Show', [
             'servicoItem' => $servicoItem,
@@ -101,8 +96,8 @@ class ServicoItemController extends Controller
      */
     public function edit(ServicoItem $servicoItem): Response
     {
-        $servicoItem->load('servico');
-        
+
+
         return Inertia::render('servico-itens/Edit', [
             'servicoItem' => $servicoItem,
         ]);
@@ -114,7 +109,7 @@ class ServicoItemController extends Controller
     public function update(ServicoItemRequest $request, ServicoItem $servicoItem): RedirectResponse
     {
         $validated = $request->validated();
-        
+
         $servicoItem->update($validated);
 
         return to_route('servico-itens.index')
@@ -138,7 +133,7 @@ class ServicoItemController extends Controller
     public function searchServicos(Request $request)
     {
         $query = $request->get('query', '');
-        
+
         if (strlen($query) < 2) {
             return response()->json([]);
         }

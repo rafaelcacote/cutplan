@@ -13,8 +13,14 @@ class ServicoRequest extends FormRequest
 
     public function rules(): array
     {
+        $id = $this->route('servico')?->id ?? $this->route('id');
         return [
-            'nome' => ['required', 'string', 'max:100'],
+            'nome' => [
+                'required',
+                'string',
+                'max:100',
+                'unique:servicos,nome' . ($id ? ",{$id},id" : '')
+            ],
             'descricao' => ['nullable', 'string'],
             'preco_base' => ['nullable', 'numeric', 'min:0'],
             'categoria' => ['nullable', 'string', 'max:50'],
@@ -27,6 +33,7 @@ class ServicoRequest extends FormRequest
         return [
             'nome.required' => 'O nome do serviço é obrigatório.',
             'nome.max' => 'O nome não pode ter mais de 100 caracteres.',
+            'nome.unique' => 'Já existe um serviço com esse nome.',
             'preco_base.numeric' => 'O preço base deve ser um valor numérico.',
             'preco_base.min' => 'O preço base não pode ser negativo.',
             'categoria.max' => 'A categoria não pode ter mais de 50 caracteres.',
