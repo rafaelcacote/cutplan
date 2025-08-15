@@ -1,0 +1,3 @@
+// Adicione este import ao topo do seu arquivo CreateSimple.vue
+import Stepper from 'primevue/stepper';
+import StepperPanel from 'primevue/stepperpanel';

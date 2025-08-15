@@ -292,16 +292,29 @@ class OrcamentoController extends Controller
             'criado_por' => auth()->id(),
         ]);
 
-        // Salvar os serviços como JSON no campo observacoes ou criar uma nova estrutura
-        // Por enquanto, vamos salvar no campo observacoes como JSON até criar a nova estrutura de tabelas
-        $servicosData = [
-            'servicos' => $request->servicos,
-            'observacoes_originais' => $request->observacoes
-        ];
-
-        $orcamento->update([
-            'observacoes' => json_encode($servicosData)
-        ]);
+        // Salvar cada serviço/itens em itens_orcamento
+        foreach ($request->servicos as $servico) {
+            $servicoId = $servico['id'] ?? null;
+            $valorTotal = $servico['valor_total'] ?? 0;
+            $obsServico = $servico['observacoes'] ?? null;
+            if (isset($servico['itens']) && is_array($servico['itens'])) {
+                foreach ($servico['itens'] as $item) {
+                    // Se o item for array, pega id e descricao, senão só descricao
+                    $servicoItemId = is_array($item) && isset($item['id']) ? $item['id'] : null;
+                    $descricao = is_array($item) && isset($item['nome']) ? $item['nome'] : (is_string($item) ? $item : null);
+                    $orcamento->itens()->create([
+                        'servico_id' => $servicoId,
+                        'servico_item_id' => $servicoItemId,
+                        'descricao' => $descricao,
+                        'quantidade' => 1,
+                        'unidade_id' => null,
+                        'preco_unitario' => $valorTotal,
+                        'eh_servico' => true,
+                        'observacoes' => $obsServico,
+                    ]);
+                }
+            }
+        }
 
         return redirect()->route('orcamentos.index')
             ->with('success', 'Orçamento criado com sucesso!');
@@ -313,12 +326,25 @@ class OrcamentoController extends Controller
     public function gerarPdf(Orcamento $orcamento)
     {
         // Carrega as relações necessárias
-        $orcamento->load('cliente');
+        $orcamento->load(['cliente', 'itens.servico']);
 
-        // Decodifica os serviços do JSON
-        $dadosJson = json_decode($orcamento->observacoes, true) ?? [];
-        $orcamento->servicos = $dadosJson['servicos'] ?? [];
-        $orcamento->observacoes_originais = $dadosJson['observacoes_originais'] ?? $orcamento->observacoes;
+        // Monta a estrutura de serviços para o PDF
+        $servicos = [];
+        foreach ($orcamento->itens as $item) {
+            $servicoId = $item->servico_id;
+            if (!isset($servicos[$servicoId])) {
+                $servicos[$servicoId] = [
+                    'nome' => $item->servico ? $item->servico->nome : 'Serviço',
+                    'valor_total' => 0,
+                    'itens' => [],
+                    'observacoes' => $item->observacoes ?? null,
+                ];
+            }
+            $servicos[$servicoId]['itens'][] = $item->descricao;
+            $servicos[$servicoId]['valor_total'] += (float) $item->preco_unitario;
+        }
+        $orcamento->servicos = array_values($servicos);
+        $orcamento->observacoes_originais = $orcamento->observacoes;
 
         // Gera o PDF
         $pdf = Pdf::loadView('orcamentos.pdf', compact('orcamento'));
@@ -342,12 +368,25 @@ class OrcamentoController extends Controller
     public function visualizarPdf(Orcamento $orcamento)
     {
         // Carrega as relações necessárias
-        $orcamento->load('cliente');
+        $orcamento->load(['cliente', 'itens.servico']);
 
-        // Decodifica os serviços do JSON
-        $dadosJson = json_decode($orcamento->observacoes, true) ?? [];
-        $orcamento->servicos = $dadosJson['servicos'] ?? [];
-        $orcamento->observacoes_originais = $dadosJson['observacoes_originais'] ?? $orcamento->observacoes;
+        // Monta a estrutura de serviços para o PDF
+        $servicos = [];
+        foreach ($orcamento->itens as $item) {
+            $servicoId = $item->servico_id;
+            if (!isset($servicos[$servicoId])) {
+                $servicos[$servicoId] = [
+                    'nome' => $item->servico ? $item->servico->nome : 'Serviço',
+                    'valor_total' => 0,
+                    'itens' => [],
+                    'observacoes' => $item->observacoes ?? null,
+                ];
+            }
+            $servicos[$servicoId]['itens'][] = $item->descricao;
+            $servicos[$servicoId]['valor_total'] += (float) $item->preco_unitario;
+        }
+        $orcamento->servicos = array_values($servicos);
+        $orcamento->observacoes_originais = $orcamento->observacoes;
 
         // Gera o PDF
         $pdf = Pdf::loadView('orcamentos.pdf', compact('orcamento'));

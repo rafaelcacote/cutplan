@@ -273,90 +273,120 @@
         </div>
 
         <!-- Informações do Orçamento -->
-        <div class="orcamento-info">
-            <div class="left">
-                <h3>Dados do Cliente</h3>
-                <p><strong>Nome:</strong> {{ $orcamento->cliente->nome }}</p>
-                @if ($orcamento->cliente->documento)
-                    <p><strong>Documento:</strong> {{ $orcamento->cliente->documento }}</p>
-                @endif
-                @if ($orcamento->cliente->email)
-                    <p><strong>Email:</strong> {{ $orcamento->cliente->email }}</p>
-                @endif
-                @if ($orcamento->cliente->telefone)
-                    <p><strong>Telefone:</strong> {{ $orcamento->cliente->telefone }}</p>
-                @endif
+        <div class="orcamento-info-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 0 24px; margin-bottom: 30px; padding: 15px; background-color: #f8f9fa; border: 1px solid #ddd;">
+            <div>
+                <h3 style="font-size: 14px; color: #2c5282; margin-bottom: 10px; border-bottom: 1px solid #ddd; padding-bottom: 5px;">Cliente</h3>
+                <table style="width: 100%; font-size: 12px;">
+                    <tr>
+                        <td style="font-weight: bold; width: 70px;">Nome:</td>
+                        <td>{{ $orcamento->cliente->nome }}</td>
+                    </tr>
+                    @if ($orcamento->cliente->documento)
+                    <tr>
+                        <td style="font-weight: bold;">Documento:</td>
+                        <td>{{ $orcamento->cliente->documento }}</td>
+                    </tr>
+                    @endif
+                    @if ($orcamento->cliente->email)
+                    <tr>
+                        <td style="font-weight: bold;">Email:</td>
+                        <td>{{ $orcamento->cliente->email }}</td>
+                    </tr>
+                    @endif
+                    @if ($orcamento->cliente->telefone)
+                    <tr>
+                        <td style="font-weight: bold;">Telefone:</td>
+                        <td>{{ $orcamento->cliente->telefone }}</td>
+                    </tr>
+                    @endif
+                </table>
             </div>
-            <div class="right">
-                <h3>Dados do Orçamento</h3>
-                <p><strong>Número:</strong> #{{ $orcamento->id }}</p>
-                <p><strong>Data:</strong> {{ $orcamento->created_at->format('d/m/Y') }}</p>
-                @if ($orcamento->validade)
-                    <p><strong>Validade:</strong> {{ \Carbon\Carbon::parse($orcamento->validade)->format('d/m/Y') }}</p>
-                @endif
-                <p><strong>Status:</strong>
-                    <span class="status-badge status-{{ $orcamento->status }}">
-                        @switch($orcamento->status)
-                            @case('draft')
-                                Rascunho
-                            @break
-
-                            @case('sent')
-                                Enviado
-                            @break
-
-                            @case('approved')
-                                Aprovado
-                            @break
-
-                            @case('rejected')
-                                Rejeitado
-                            @break
-
-                            @case('expired')
-                                Expirado
-                            @break
-
-                            @default
-                                {{ $orcamento->status }}
-                        @endswitch
-                    </span>
-                </p>
+            <div>
+                <h3 style="font-size: 14px; color: #2c5282; margin-bottom: 10px; border-bottom: 1px solid #ddd; padding-bottom: 5px;">Orçamento</h3>
+                <table style="width: 100%; font-size: 12px;">
+                    <tr>
+                        <td style="font-weight: bold; width: 80px;">Número:</td>
+                        <td>#{{ $orcamento->id }}</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold;">Data:</td>
+                        <td>{{ $orcamento->created_at->format('d/m/Y') }}</td>
+                    </tr>
+                    @if ($orcamento->validade)
+                    <tr>
+                        <td style="font-weight: bold;">Validade:</td>
+                        <td>{{ \Carbon\Carbon::parse($orcamento->validade)->format('d/m/Y') }}</td>
+                    </tr>
+                    @endif
+                    <tr>
+                        <td style="font-weight: bold;">Status:</td>
+                        <td>
+                            <span class="status-badge status-{{ $orcamento->status }}">
+                                @switch($orcamento->status)
+                                    @case('draft')
+                                        Rascunho
+                                    @break
+                                    @case('sent')
+                                        Enviado
+                                    @break
+                                    @case('approved')
+                                        Aprovado
+                                    @break
+                                    @case('rejected')
+                                        Rejeitado
+                                    @break
+                                    @case('expired')
+                                        Expirado
+                                    @break
+                                    @default
+                                        {{ $orcamento->status }}
+                                @endswitch
+                            </span>
+                        </td>
+                    </tr>
+                </table>
             </div>
         </div>
 
         <!-- Serviços -->
         <div class="services-section">
             <h2>Serviços e Itens</h2>
-
             @if (is_array($orcamento->servicos) && count($orcamento->servicos) > 0)
-                @foreach ($orcamento->servicos as $servico)
-                    <div class="service">
-                        <div class="service-header">
-                            <h3>{{ $servico['nome'] ?? 'Serviço sem nome' }}</h3>
-                            <div class="price">R$ {{ number_format($servico['valor_total'] ?? 0, 2, ',', '.') }}</div>
-                        </div>
-                        <div class="service-content">
+            <table style="width:100%; border-collapse:collapse; margin-bottom:30px;">
+                <thead>
+                    <tr style="background:#153e8a; color:#fff;">
+                        <th style="padding:8px; border:1px solid #153e8a; font-size:13px; text-align:left;">SERVIÇO</th>
+                        <th style="padding:8px; border:1px solid #153e8a; font-size:13px; text-align:left;">DESCRIÇÃO</th>
+                        <th style="padding:8px; border:1px solid #153e8a; font-size:13px; text-align:right;">VALOR</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($orcamento->servicos as $servico)
+                    <tr>
+                        <td style="padding:10px 8px; border:1px solid #ddd; vertical-align:top; width:25%;">
+                            {{ $servico['nome'] ?? 'Serviço sem nome' }}
+                        </td>
+                        <td style="padding:10px 8px; border:1px solid #ddd; vertical-align:top; width:55%;">
                             @if (isset($servico['itens']) && is_array($servico['itens']) && count($servico['itens']) > 0)
-                                <div class="service-items">
-                                    <h4>Itens inclusos:</h4>
-                                    <ul>
-                                        @foreach ($servico['itens'] as $item)
-                                            <li>{{ $item }}</li>
-                                        @endforeach
-                                    </ul>
-                                </div>
+                                <ul style="margin:0 0 0 18px; padding:0; list-style:disc;">
+                                    @foreach ($servico['itens'] as $item)
+                                        <li style="margin-bottom:2px;">{{ $item }}</li>
+                                    @endforeach
+                                </ul>
                             @endif
-
                             @if (!empty($servico['observacoes']))
-                                <div class="service-obs">
-                                    <h4>Observações:</h4>
-                                    <p>{{ $servico['observacoes'] }}</p>
+                                <div style="margin-top:6px; font-size:11px; color:#444;">
+                                    <strong>Obs.:</strong> {{ $servico['observacoes'] }}
                                 </div>
                             @endif
-                        </div>
-                    </div>
-                @endforeach
+                        </td>
+                        <td style="padding:10px 8px; border:1px solid #ddd; vertical-align:top; text-align:right; width:20%; white-space:nowrap; font-weight:bold;">
+                            R$ {{ number_format($servico['valor_total'] ?? 0, 2, ',', '.') }}
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
             @else
                 <p>Nenhum serviço encontrado para este orçamento.</p>
             @endif

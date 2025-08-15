@@ -10,6 +10,7 @@ class ItemOrcamento extends Model
     use HasFactory;
 
     protected $table = 'itens_orcamento';
+    public $timestamps = false;
 
     protected $fillable = [
         'orcamento_id',

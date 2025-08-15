@@ -279,132 +279,121 @@ const hasActiveFilters = computed(() => {
 
         <Toast position="top-center" group="main" />
 
-        <div class="space-y-6">
+    <div class="flex flex-col gap-6 p-4 md:p-8 bg-[#F8FAFC] min-h-screen dark:bg-[#1E293B] transition-colors duration-300">
             <!-- Header -->
-            <div class="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
+            <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
                 <div>
-                    <h1 class="text-3xl font-bold tracking-tight text-gray-900">Orçamentos</h1>
-                    <p class="mt-1 text-gray-600">Gerencie todos os orçamentos da empresa</p>
+                    <h1 class="text-3xl font-extrabold tracking-tight text-[#3B82F6] dark:text-[#60A5FA] flex items-center gap-2">
+                        <FileText class="h-8 w-8" />
+                        Orçamentos
+                    </h1>
+                    <p class="text-[#64748B] dark:text-[#CBD5E1]">Gerencie todos os orçamentos da empresa</p>
                 </div>
-                <div class="flex gap-2">
-                    <Link
-                        :href="`/orcamentos/create-simple`"
-                        class="inline-flex items-center justify-center rounded-md bg-green-600 px-4 py-2 text-sm font-medium text-white shadow transition-colors hover:bg-green-700 focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:outline-none"
-                    >
-                        <Plus class="mr-2 h-4 w-4" />
-                        Novo Orçamento (Simples)
-                    </Link>
-                    <Link
-                        :href="`/orcamentos/create`"
-                        class="inline-flex items-center justify-center rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow transition-colors hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none"
-                    >
+                <Button as-child class="bg-gradient-to-r from-[#3B82F6] to-[#6366F1] text-white shadow-lg border-0 px-6 py-2 rounded-lg font-semibold text-base transition-transform duration-300 hover:scale-105">
+                    <Link :href="`/orcamentos-simples/create`">
                         <Plus class="mr-2 h-4 w-4" />
                         Novo Orçamento
                     </Link>
-                </div>
+                </Button>
             </div>
 
-            <!-- Filtros -->
-            <Card>
-                <CardHeader class="pb-4">
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center gap-2">
-                            <Filter class="h-5 w-5 text-gray-500" />
-                            <CardTitle class="text-lg">Filtros</CardTitle>
-                            <span
-                                v-if="hasActiveFilters"
-                                class="inline-flex items-center rounded-full bg-blue-100 px-2.5 py-0.5 text-xs font-medium text-blue-800"
-                            >
-                                {{ [cliente, status, dataInicio, dataFim].filter(Boolean).length }} ativo(s)
-                            </span>
-                        </div>
-                        <Button variant="ghost" size="sm" @click="showFilters = !showFilters" class="text-gray-600">
-                            <ChevronDown :class="['h-4 w-4 transition-transform', showFilters && 'rotate-180']" />
-                        </Button>
-                    </div>
-                </CardHeader>
-                <CardContent v-if="showFilters" class="space-y-4">
-                    <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
-                        <div class="space-y-2">
-                            <Label for="filter-cliente">Cliente</Label>
-                            <InputText id="filter-cliente" v-model="cliente" placeholder="Nome do cliente..." class="w-full" />
-                        </div>
-
-                        <div class="space-y-2">
-                            <Label for="filter-status">Status</Label>
-                            <Dropdown
-                                id="filter-status"
-                                v-model="status"
-                                :options="[{ label: 'Todos', value: '' }, ...props.statusOptions]"
-                                option-label="label"
-                                option-value="value"
-                                placeholder="Selecione o status"
-                                class="w-full"
-                            />
-                        </div>
-
-                        <div class="space-y-2">
-                            <Label for="filter-data-inicio">Data Início</Label>
-                            <Calendar
-                                id="filter-data-inicio"
-                                v-model="dataInicio"
-                                date-format="dd/mm/yy"
-                                placeholder="dd/mm/aaaa"
-                                class="w-full"
-                                show-icon
-                            />
-                        </div>
-
-                        <div class="space-y-2">
-                            <Label for="filter-data-fim">Data Fim</Label>
-                            <Calendar
-                                id="filter-data-fim"
-                                v-model="dataFim"
-                                date-format="dd/mm/yy"
-                                placeholder="dd/mm/aaaa"
-                                class="w-full"
-                                show-icon
-                            />
-                        </div>
-                    </div>
-
-                    <div class="flex flex-col gap-2 border-t pt-4 sm:flex-row">
-                        <Button @click="updateFilters" class="flex-1 sm:flex-none">
-                            <Search class="mr-2 h-4 w-4" />
-                            Filtrar
-                        </Button>
-                        <Button variant="outline" @click="clearFilters" class="flex-1 sm:flex-none">
-                            <X class="mr-2 h-4 w-4" />
-                            Limpar
-                        </Button>
-                    </div>
-                </CardContent>
-            </Card>
+                        <!-- Filtros -->
+                        <Card class="shadow-2xl border-1 surface-border border-[#E0E7EF] dark:border-[#334155] bg-white dark:bg-[#1E293B] rounded-2xl transition-all duration-300">
+                                <CardHeader>
+                                        <div class="flex items-center justify-between">
+                                                <CardTitle class="flex items-center gap-2 text-[#3B82F6] dark:text-[#60A5FA]">
+                                                        <Filter class="h-5 w-5" />
+                                                        Filtros
+                                                </CardTitle>
+                                                <Button 
+                                                    variant="ghost" 
+                                                    size="sm" 
+                                                    @click="showFilters = !showFilters"
+                                                    class="text-[#64748B] dark:text-[#CBD5E1] hover:bg-[#F1F5F9] dark:hover:bg-[#334155] rounded-full transition-all duration-300"
+                                                >
+                                                    <ChevronDown 
+                                                        class="h-4 w-4 transition-transform duration-200" 
+                                                        :class="{ 'rotate-180': showFilters }"
+                                                    />
+                                                </Button>
+                                        </div>
+                                </CardHeader>
+                                <transition name="fade">
+                                    <CardContent v-if="showFilters" class="pt-0">
+                                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                                            <div class="space-y-2">
+                                                <Label for="filter-cliente">Cliente</Label>
+                                                <InputText id="filter-cliente" v-model="cliente" placeholder="Nome do cliente..." class="w-full" />
+                                            </div>
+                                            <div class="space-y-2">
+                                                <Label for="filter-status">Status</Label>
+                                                <Dropdown
+                                                    id="filter-status"
+                                                    v-model="status"
+                                                    :options="[{ label: 'Todos', value: '' }, ...props.statusOptions]"
+                                                    option-label="label"
+                                                    option-value="value"
+                                                    placeholder="Selecione o status"
+                                                    class="w-full"
+                                                />
+                                            </div>
+                                            <div class="space-y-2">
+                                                <Label for="filter-data-inicio">Data Início</Label>
+                                                <Calendar
+                                                    id="filter-data-inicio"
+                                                    v-model="dataInicio"
+                                                    date-format="dd/mm/yy"
+                                                    placeholder="dd/mm/aaaa"
+                                                    class="w-full"
+                                                    show-icon
+                                                />
+                                            </div>
+                                            <div class="space-y-2">
+                                                <Label for="filter-data-fim">Data Fim</Label>
+                                                <Calendar
+                                                    id="filter-data-fim"
+                                                    v-model="dataFim"
+                                                    date-format="dd/mm/yy"
+                                                    placeholder="dd/mm/aaaa"
+                                                    class="w-full"
+                                                    show-icon
+                                                />
+                                            </div>
+                                        </div>
+                                        <div class="flex justify-end mt-4">
+                                            <Button 
+                                                variant="outline" 
+                                                size="sm" 
+                                                @click="clearFilters"
+                                                v-if="cliente || status || dataInicio || dataFim"
+                                                class="border-[#3B82F6] text-[#3B82F6] dark:text-[#60A5FA] hover:bg-[#EFF6FF] dark:hover:bg-[#334155] rounded-lg transition-all duration-300"
+                                            >
+                                                <X class="mr-2 h-4 w-4" />
+                                                Limpar Filtros
+                                            </Button>
+                                        </div>
+                                    </CardContent>
+                                </transition>
+                        </Card>
 
             <!-- Tabela -->
-            <Card>
+            <Card class="shadow-2xl border-1 surface-border border-[#E0E7EF] dark:border-[#334155] bg-white dark:bg-[#1E293B] rounded-2xl transition-all duration-300">
                 <CardHeader>
-                    <div class="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
-                        <div>
-                            <CardTitle>Lista de Orçamentos</CardTitle>
-                            <CardDescription> {{ props.orcamentos.total }} orçamento(s) encontrado(s) </CardDescription>
-                        </div>
-                        <div class="flex items-center gap-2">
-                            <Label for="per-page" class="text-sm">Exibir:</Label>
-                            <Dropdown
-                                id="per-page"
-                                v-model="perPage"
-                                :options="perPageOptions"
-                                option-label="label"
-                                option-value="value"
-                                @change="updateFilters"
-                                class="w-32"
-                            />
-                        </div>
-                    </div>
+                    <CardTitle class="text-[#1E293B] dark:text-white">Lista de Orçamentos</CardTitle>
+                    <CardDescription class="text-[#64748B] dark:text-[#CBD5E1]">
+                        Mostrando {{ props.orcamentos.data.length }} de {{ props.orcamentos.total }} orçamentos
+                        <span v-if="cliente || status || dataInicio || dataFim" class="text-[#3B82F6] dark:text-[#60A5FA]">(filtrados)</span>
+                    </CardDescription>
                 </CardHeader>
                 <CardContent class="p-0">
-                    <DataTable :value="props.orcamentos.data" :loading="loading" striped-rows responsive-layout="scroll" class="p-datatable-sm">
+                    <DataTable
+                        :value="props.orcamentos.data"
+                        class="w-full p-datatable-sm striped highlight-on-hover premium-table ![&_.p-datatable-tbody>tr>td]:px-4 ![&_.p-datatable-thead>tr>th]:px-4"
+                        responsiveLayout="scroll"
+                        :loading="loading"
+                        stripedRows
+                        rowHover
+                    >
                         <Column field="id" header="#" class="w-16">
                             <template #body="{ data }">
                                 <span class="font-mono text-sm">#{{ data.id }}</span>
@@ -448,7 +437,7 @@ const hasActiveFilters = computed(() => {
                         <Column header="Ações" class="w-32">
                             <template #body="{ data }">
                                 <div class="flex items-center gap-1">
-                                    <Link
+                                    <!-- <Link
                                         :href="`/orcamentos/${data.id}`"
                                         class="inline-flex h-8 w-8 items-center justify-center rounded-md text-blue-600 transition-colors hover:bg-blue-50"
                                         title="Visualizar"
@@ -461,7 +450,7 @@ const hasActiveFilters = computed(() => {
                                         title="Editar"
                                     >
                                         <Edit class="h-4 w-4" />
-                                    </Link>
+                                    </Link> -->
                                     <Button
                                         variant="ghost"
                                         size="sm"
@@ -471,7 +460,7 @@ const hasActiveFilters = computed(() => {
                                     >
                                         <FileText class="h-4 w-4" />
                                     </Button>
-                                    <Button
+                                    <!-- <Button
                                         variant="ghost"
                                         size="sm"
                                         @click="imprimirPdf(data)"
@@ -479,7 +468,7 @@ const hasActiveFilters = computed(() => {
                                         title="Imprimir PDF"
                                     >
                                         <Printer class="h-4 w-4" />
-                                    </Button>
+                                    </Button> -->
                                     <Button
                                         variant="ghost"
                                         size="sm"
@@ -524,20 +513,40 @@ const hasActiveFilters = computed(() => {
         </div>
 
         <!-- Dialog de Confirmação de Exclusão -->
-        <Dialog v-model:visible="showDeleteDialog" modal header="Confirmar Exclusão" class="w-full max-w-md">
-            <div class="space-y-4">
-                <p class="text-gray-700">
-                    Tem certeza que deseja excluir o orçamento
-                    <strong v-if="orcamentoToDelete">#{{ orcamentoToDelete.id }}</strong
-                    >?
-                </p>
-                <p class="text-sm text-gray-500">Esta ação não pode ser desfeita.</p>
-            </div>
-
-            <template #footer>
-                <div class="flex justify-end gap-2">
-                    <Button variant="outline" @click="showDeleteDialog = false" :disabled="loading"> Cancelar </Button>
-                    <Button variant="destructive" @click="confirmDeleteOrcamento" :disabled="loading"> Excluir </Button>
+        <Dialog v-model:visible="showDeleteDialog" modal :closable="false" class="w-full max-w-md mx-auto">
+            <template #container="{ closeCallback }">
+                <div class="bg-white dark:bg-[#1E293B] rounded-2xl shadow-2xl border border-red-200 dark:border-red-800 p-8 space-y-8 animate-fade-in transition-all duration-300">
+                    <!-- Header com ícone animado -->
+                    <div class="flex items-center gap-4">
+                        <div class="flex-shrink-0 w-14 h-14 bg-red-100 dark:bg-red-900 rounded-full flex items-center justify-center animate-pulse">
+                            <svg class="w-7 h-7 text-red-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01M21 12c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9 9 4.03 9 9z"/></svg>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-red-500">Excluir Orçamento</h3>
+                            <p class="text-sm text-[#64748B] dark:text-[#CBD5E1]">Esta ação <span class='font-semibold text-red-500'>não pode ser desfeita</span>.</p>
+                        </div>
+                    </div>
+                    <!-- Conteúdo -->
+                    <div class="space-y-4">
+                        <p class="text-lg text-[#1E293B] dark:text-white">
+                            Tem certeza que deseja excluir o orçamento
+                            <span class="font-semibold text-[#3B82F6] dark:text-[#60A5FA]">#{{ orcamentoToDelete?.id }}</span>?
+                        </p>
+                        <div class="bg-red-50 dark:bg-red-900 rounded-md p-4 border-l-4 border-red-500 flex items-center gap-3">
+                            <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01M21 12c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9 9 4.03 9 9z"/></svg>
+                            <span class="text-sm text-red-500 font-medium">Todos os itens deste orçamento serão <u>permanentemente removidos</u>.</span>
+                        </div>
+                    </div>
+                    <!-- Ações -->
+                    <div class="flex justify-end gap-4 pt-6 border-t border-[#E0E7EF] dark:border-[#334155]">
+                        <Button variant="outline" @click="showDeleteDialog = false" class="px-7 py-2 text-base hover:bg-[#F1F5F9] dark:hover:bg-[#334155] transition-all rounded-lg">
+                            Cancelar
+                        </Button>
+                        <Button variant="destructive" @click="confirmDeleteOrcamento" class="px-7 py-2 text-base flex items-center gap-2 shadow hover:bg-red-600 hover:text-white transition-all rounded-lg">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01M21 12c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9 9 4.03 9 9z"/></svg>
+                            <span>Excluir</span>
+                        </Button>
+                    </div>
                 </div>
             </template>
         </Dialog>

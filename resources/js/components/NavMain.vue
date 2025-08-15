@@ -22,6 +22,18 @@ defineProps<{
 const page = usePage();
 const cadastrosOpen = ref(false);
 const configOpen = ref(false);
+
+import { watchEffect } from 'vue';
+
+// Rotas dos submenus
+const cadastrosRoutes = ['/clientes', '/contatos', '/fornecedores', '/materiais'];
+const configRoutes = ['/servicos', '/servico-itens', '/equipes'];
+
+// Abrir automaticamente se a rota atual for de algum subitem
+watchEffect(() => {
+    cadastrosOpen.value = cadastrosRoutes.some(route => page.url.startsWith(route));
+    configOpen.value = configRoutes.some(route => page.url.startsWith(route));
+});
 </script>
 
 <template>
