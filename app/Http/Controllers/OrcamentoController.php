@@ -127,17 +127,7 @@ class OrcamentoController extends Controller
      */
     public function show(Orcamento $orcamento): Response
     {
-        $orcamento->load([
-            'cliente',
-            'criadoPor',
-            'itens.servico',
-            'itens.servicoItem',
-            'itens.unidade'
-        ]);
-
-        return Inertia::render('orcamentos/Show', [
-            'orcamento' => $orcamento,
-        ]);
+       
     }
 
     /**

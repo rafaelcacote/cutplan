@@ -35,7 +35,7 @@ Route::middleware(['auth', 'verified'])->get('/usuarios/{user}/edit', [UsuarioPa
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('clientes', ClienteController::class);
-    Route::resource('orcamentos', OrcamentoController::class);
+    Route::resource('orcamentos', OrcamentoController::class)->except('show');
 
     // Nova rota para o formulário simples de orçamentos
     Route::get('orcamentos-simples/create', [OrcamentoController::class, 'createSimple'])->name('orcamentos.create-simple');
